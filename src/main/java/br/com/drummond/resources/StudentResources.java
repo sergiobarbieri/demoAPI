@@ -67,7 +67,7 @@ public class StudentResources {
 	
 	/**
 	 * Inserir um novo aluno
-	 * @param student
+	 * @param json student
 	 * @return
 	 */
 	@RequestMapping(value = "/students", method = RequestMethod.POST)
