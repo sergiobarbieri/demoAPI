@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Post - formulario</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+     <script>
+    
+        // https://github.com/axios/axios
+
+
+        function novoEstudante() {
+            let student = {}
+            student.ra = document.getElementById("ra").value;
+            student.name = document.getElementById("nome").value;
+            student.email = document.getElementById("email").value;
+
+            axios.post('http://localhost:9001/students', student)
+                .then(function (response) {
+                    console.log(response.data);
+                    document.getElementById("resp").innerText = "Sucesso";
+                    console.log(response.status);
+                    document.getElementById("status").innerText = response.status;
+                }).catch(function (error) {
+                    console.log(error);
+                    if (error.response) {
+                        if (error.response.status == 409) {
+                            document.getElementById("resp").innerText = "Duplicidade";
+                            document.getElementById("status").innerText = "";
+                        }
+                        else {
+                            document.getElementById("resp").innerText = error.message;
+                            document.getElementById("status").innerText = error.response.status;
+                        }
+                    } else
+                        document.getElementById("resp").innerText = error.message;
+                });
+        }
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Conteúdo aqui -->
+        <h1>Cadastro de Estudante</h1>
+         <div class="form-group">
+            <label for="ra">RA</label>
+            <input type="text" class="form-control" id="ra" placeholder="numero ra">
+
+        </div>
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" id="nome" placeholder="seu nome">
+        </div>
+        <div class="form-group">
+            <label for="email">Endereço de email</label>
+            <input type="email" class="form-control" id="email" placeholder="Seu email">
+        </div>
+        
+        <button type="button" class="btn btn-primary" onclick="novoEstudante()">Novo Estudante</button>
+        <br />
+        <span id="status" style="font-weight:bold;"></span>
+        <div id="resp"></div>
+    </div>
+</body>
+</html>

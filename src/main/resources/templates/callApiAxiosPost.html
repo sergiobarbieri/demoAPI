@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Call API + AXIOS</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+    <script>
+    
+        // https://github.com/axios/axios
+
+
+        function novoEstudante() {
+            let student = {}
+            student.ra = 11;
+            student.name = 'Natalia Souza';
+            student.email = 'ns@gmail.com'
+
+            axios.post('http://localhost:9001/students', student)
+                .then(function (response) {
+                    console.log(response.data);
+                    document.getElementById("resp").innerText = JSON.stringify(response.data);
+                    console.log(response.status);
+                    document.getElementById("status").innerText = response.status;
+                });
+
+        }
+
+    </script>
+    <h1 id="sistema">Exemplo POST estudante</h1>
+    <button onclick="novoEstudante()">Inserir novo estudante</button>
+    <div id="resp"></div>
+    <span id="status" style="font-weight:bold"></span>
+</body>
+
+</html>

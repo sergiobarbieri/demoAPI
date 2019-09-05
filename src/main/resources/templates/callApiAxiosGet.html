@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Call API + AXIOS</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+    <script>
+        // https://github.com/axios/axios
+
+        axios.get('http://localhost:9001/health')
+            .then(function (response) {
+                console.log(response.data); 
+                document.getElementById("sistema").innerText = response.data;
+                console.log(response.status); 
+            }); 
+
+        axios.get('http://localhost:9001/students')
+            .then(function (response) {
+                console.log(response.data);
+                document.getElementById("resp").innerText = JSON.stringify(response.data);
+                console.log(response.status);
+            });  
+		
+    
+
+    </script>
+    <h1 id="sistema"></h1>
+    <div id="resp"></div>
+</body>
+
+</html>

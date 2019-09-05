@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.drummond</groupId>
 	<artifactId>demoApi</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>demoApi</name>
 	<description>Exemplo API</description>
 
