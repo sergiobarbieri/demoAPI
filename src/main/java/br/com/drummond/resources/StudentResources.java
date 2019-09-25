@@ -1,11 +1,17 @@
 package br.com.drummond.resources;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -56,6 +62,29 @@ public class StudentResources {
 	 */
 	@RequestMapping(value = "/students/{ra}", method = RequestMethod.GET)
 	public ResponseEntity<?> obterAlunoRa(@PathVariable Integer ra) {
+		
+		Optional<Student> student; // Optional: container objeto.
+		
+		student = studentRepository.findById(ra);
+		
+		if (student.isPresent())
+			return new ResponseEntity<Student>(student.get(), HttpStatus.OK);
+		else
+			return new ResponseEntity<Student>(student.get(), HttpStatus.NO_CONTENT);
+	}
+	
+	
+	/**
+	 * Exemplo cache
+	 * @param ra
+	 * @return
+	 * @throws InterruptedException 
+	 */
+	@RequestMapping(value = "/students2/{ra}", method = RequestMethod.GET)
+	@Cacheable(value="studentsCache")
+	public ResponseEntity<?> obterAlunoRa2(@PathVariable Integer ra) throws InterruptedException {
+		
+		Thread.sleep(5000);
 		
 		Optional<Student> student; // Optional: container objeto.
 		
@@ -126,4 +155,32 @@ public class StudentResources {
 		
 		return new ResponseEntity<Student>(studentRepo.get(), HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/callApiAxiosPost3.html", method = RequestMethod.GET)
+	public ResponseEntity<?> getFormApiAxiosPost3() throws IOException {
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+
+		responseHeaders.add("drummond", "CCO-SI");
+		responseHeaders.add("Content-Type", "text/html; charset=UTF-8");
+		responseHeaders.add("Cache-Control", "public, max-age=0");
+		
+		String page = readPageHTML("/templates/callApiAxiosPost3.html");
+	
+	    return ResponseEntity.ok()
+	    	      .headers(responseHeaders)
+	    	      .body(page);
+	}
+	
+	private String readPageHTML(String resource) throws IOException {
+    	InputStream is = StudentResources.class.getResourceAsStream(resource);
+    	
+    	ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = is.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        return result.toString(StandardCharsets.UTF_8.name());
+    }
 }
